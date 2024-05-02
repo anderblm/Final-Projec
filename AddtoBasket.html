@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add to Basket</title>
+    <link rel="stylesheet" href="general.css">
+    <ul class="topnav">
+        <li><a class="active" href="Home.html">Home</a></li>
+        <li><a href="addtobasket.html">Basket</a></li>
+        <li><a href="trackOrder.html">Track Order</a></li>
+        <li class="right"><a href="login.html">Login</a></li>
+    </ul>
+    <style>
+        /* Add your custom styles here */
+    </style>
+</head>
+<body>
+    <h2>Add to Basket</h2>
+    
+    <div>
+        <label for="deliveryDate">Delivery Date:</label>
+        <input type="date" id="deliveryDate" required>
+    </div>
+
+    <div>
+        <p>Purchase Option:</p>
+        <input type="radio" id="subscriptionOption" name="purchaseOption" value="subscription">
+        <label for="subscriptionOption">With Subscription (Cheaper Price)</label><br>
+        <input type="radio" id="regularOption" name="purchaseOption" value="regular">
+        <label for="regularOption">Regular Price</label><br>
+    </div>
+
+    <button onclick="addToBasket()">Add to Basket</button>
+
+    <script>
+        function addToBasket() {
+            let deliveryDate = document.getElementById("deliveryDate").value;
+            let purchaseOption = document.querySelector('input[name="purchaseOption"]:checked').value;
+
+            // Validate delivery date and purchase option
+            if (deliveryDate === "" || purchaseOption === "") {
+                alert("Please select delivery date and purchase option.");
+                return;
+            }
+
+            // Construct basket item object
+            let basketItem = {
+                deliveryDate: deliveryDate,
+                purchaseOption: purchaseOption
+            };
+
+            // Add basket item to local storage
+            let basketItems = JSON.parse(localStorage.getItem("basket")) || [];
+            basketItems.push(basketItem);
+            localStorage.setItem("basket", JSON.stringify(basketItems));
+
+            // Navigate to the basket page
+            window.location.href = "addtobasket.html"; // Change this to the basket page URL
+        }
+    </script>
+</body>
+</html>

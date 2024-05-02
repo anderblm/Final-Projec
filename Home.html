@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flower Shop</title>
+    <link rel="stylesheet" href="navbar.css">
+    <link rel="stylesheet" href="general.css">
+    <link rel="stylesheet" href="cards.css">
+    <style>
+        .header-banner {
+            background-color: pink;
+            padding: 5px;
+            text-align: center;
+        }
+
+        .header-banner img {
+            width: 200px; /* Adjust image width */
+            display: block;
+            margin: 0 auto 20px; /* Center the image */
+        }
+
+        .header-banner-text {
+            color: rgb(5, 5, 5);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <ul class="topnav">
+        <li><a class="active" href="Home.html">Home</a></li>
+        <li><a href="addtobasket.html">Basket</a></li>
+        <li><a href="trackOrder.html">Track Order</a></li>
+        <li class="right"><a href="login.html">Login</a></li>
+    </ul>
+
+    <!-- Header Banner -->
+    <div class="header-banner">
+        <img src="c:\Users\Blane Anderson\Downloads\beautiful-flower-bouquet-5.jpg" alt="Flower Image">
+        <div class="header-banner-text">
+            <p>Send her Blooms</p>
+            <p>She will Love! Shop All Mothers Day Flowers and Gifts!</p>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div id="filters">
+        <label for="flowerType">Filter by Flower Type:</label>
+        <select id="flowerType">
+            <option value="mixed">Mixed</option>
+            <option value="roses">Roses</option>
+            <option value="lilies">Lilies</option>
+            <option value="tulips">Tulips</option>
+            <option value="daisies">Daisies</option>
+        </select>
+
+        <label for="occasion">Filter by Occasion:</label>
+        <select id="occasion">
+            <option value="Mother's day">Mother's day</option>
+            <option value="birthday">Birthday</option>
+            <option value="thank you">Thank You</option>
+        </select>
+
+        <label for="color">Filter by Color:</label>
+        <select id="color">
+            <option value="mixed">Mixed</option>
+            <option value="red">Red</option>
+            <option value="yellow">Yellow</option>
+            <option value="green">Green</option>
+            <option value="orange">Orange</option>
+        </select>
+
+        <label for="sortBy">Sort By:</label>
+        <select id="sortBy">
+            <option value="lowToHigh">Price: Low to High</option>
+            <option value="highToLow">Price: High to Low</option>
+        </select>
+    </div>
+
+    <!-- Flower List -->
+    <div id="flowerList" class="cards"></div>
+
+    <!-- Script Section -->
+    <script src="configuration.js"></script>
+    <script>
+        let host = getHost();
+        let flowers = [];
+
+        // Fetch all flowers from the backend
+        async function getAllFlowers() {
+            let response = await fetch(host + "/flowers");
+            let result = await response.json();
+            return result;
+        }
+
+        // Display flowers on the page
+        async function displayFlowers() {
+            if (flowers.length === 0) {
+                flowers = await getAllFlowers();
+            }
+
+            let list = document.getElementById("flowerList");
+            list.innerHTML = "";
+
+            for (let flower of flowers) {
+                let div = document.createElement("div");
+                div.className = "card";
+                let innerHtml = `
+                    <img src="${host}/flowers/${flower.id}/image" alt="${flower.name}" style="width:100%">
+                    <div class="container">
+                        <h4><b>${flower.name}</b></h4> 
+                        <p>Price: $${flower.price}</p>
+                    </div>
+                `;
+                div.innerHTML = innerHtml;
+                div.addEventListener("click", () => addToBasket(flower));
+                list.appendChild(div);
+            }
+        }
+
+        // Add a flower to the basket
+        async function addToBasket(flower) {
+            // Store flower information in local storage
+            let basketItems = JSON.parse(localStorage.getItem("basket")) || [];
+            basketItems.push(flower);
+            localStorage.setItem("basket", JSON.stringify(basketItems));
+            updateBasketIcon(); // Update basket icon
+            alert("Added to basket!");
+        }
+
+        // Update basket icon to display the current number of items
+        function updateBasketIcon() {
+            let basketItems = JSON.parse(localStorage.getItem("basket")) || [];
+            let basketIcon = document.getElementById("basketIcon");
+            basketIcon.innerText = `Basket (${basketItems.length})`;
+        }
+
+        // Load flowers when the page loads
+        displayFlowers();
+
+        // Implement filtering and sorting functionality
+        // (You need to write this part)
+    </script>
+</body>
+</html>

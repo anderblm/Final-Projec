@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Place Order</title>
+    <link rel="stylesheet" href="general.css">
+    <link rel="stylesheet" href="navbar.css">
+    <link rel="stylesheet" href="cards.css">
+    <ul class="topnav">
+        <li><a class="active" href="Home.html">Home</a></li>
+        <li><a href="addtobasket.html">Basket</a></li>
+        <li><a href="trackOrder.html">Track Order</a></li>
+        <li><a href="placeOrder..html">Place Order</a></li>
+        <li class="right"><a href="login.html">Login</a></li>
+    </ul>
+    <style>
+        /* Add your custom styles here */
+    </style>
+</head>
+<body>
+    <h2>Place Order</h2>
+    
+    <form id="orderForm">
+        <div>
+            <label for="paymentMethod">Payment Method:</label>
+            <select id="paymentMethod" required>
+                <option value="">Select Payment Method</option>
+                <option value="creditCard">Credit Card</option>
+                <option value="paypal">PayPal</option>
+            </select>
+        </div>
+
+        <button type="button" onclick="placeOrder()">Place Order</button>
+    </form>
+
+    <script>
+        function placeOrder() {
+            let paymentMethod = document.getElementById("paymentMethod").value;
+
+            // Validate form field
+            if (paymentMethod === "") {
+                alert("Please select a payment method.");
+                return;
+            }
+
+            // Retrieve delivery information from local storage
+            let deliveryInfo = JSON.parse(localStorage.getItem("deliveryInfo"));
+
+            // Calculate total price
+            let subtotal = 0; // Calculate subtotal based on items in the basket
+            let deliveryFee = 25;
+            let discount = 0;
+            let totalPrice = subtotal + deliveryFee - discount;
+
+            // Prepare order object
+            let order = {
+                deliveryInfo: deliveryInfo,
+                paymentMethod: paymentMethod,
+                subtotal: subtotal,
+                deliveryFee: deliveryFee,
+                discount: discount,
+                totalPrice: totalPrice,
+                status: "submitted"
+            };
+
+            // Save order in the database (send HTTP request to backend endpoint)
+
+            // Clear basket in local storage
+            localStorage.removeItem("basket");
+
+            // Navigate to order confirmation page
+            window.location.href = "order_confirmation.html"; // Change this to the order confirmation page URL
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Order</title>
+    <link rel="stylesheet" href="general.css">
+    <link rel="stylesheet" href="navbar.css">
+    <link rel="stylesheet" href="cards.css">
+    <ul class="topnav">
+        <li><a class="active" href="Home.html">Home</a></li>
+        <li><a href="addtobasket.html">Basket</a></li>
+        <li><a href="trackOrder.html">Track Order</a></li>
+        <li class="right"><a href="login.html">Login</a></li>
+    </ul>
+    <style>
+        /* Add your custom styles here */
+    </style>
+</head>
+<body>
+    <h2>Track Order</h2>
+
+    <div id="orderList">
+        <!-- Order list will be populated dynamically -->
+    </div>
+
+    <script>
+        // Check if the customer is logged in (you need to implement this logic)
+        let isLoggedIn = true; // Example: Set to true if the customer is logged in, false otherwise
+
+        if (!isLoggedIn) {
+            // Redirect to login/signup page if not logged in
+            window.location.href = "login.html"; // Change this to the login/signup page URL
+        } else {
+            // Retrieve customer's orders (you need to implement this logic)
+            let orders = []; // Example: Retrieve orders from the database
+
+            // Display orders
+            displayOrders(orders);
+        }
+
+        function displayOrders(orders) {
+            let orderListDiv = document.getElementById("orderList");
+
+            // Clear existing content
+            orderListDiv.innerHTML = "";
+
+            // Display each order
+            orders.forEach(order => {
+                let orderDiv = document.createElement("div");
+                orderDiv.classList.add("order");
+
+                // Populate order details
+                orderDiv.innerHTML = `
+                    <h3>Order Details</h3>
+                    <p><strong>Flower Name:</strong> ${order.flowerName}</p>
+                    <p><strong>Total Cost:</strong> $${order.totalCost}</p>
+                    <p><strong>Recipient:</strong> ${order.firstName} ${order.lastName}</p>
+                    <p><strong>Status:</strong> ${order.status}</p>
+                `;
+
+                orderListDiv.appendChild(orderDiv);
+            });
+        }
+    </script>
+</body>
+</html>
